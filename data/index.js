@@ -35,17 +35,18 @@ exports.getDataBySectionConfig = async (config) => {
     if (!variables) return result;
     const systemVariables = ["articles"];
     for (let variable of variables) {
-        let { name, params, items } = variable;
-        if (systemVariables.includes(name)) {
-            //Lay du lieu theo ten bien "name" va "params" []
-            if (!params || !Array.isArray(params)) params = {};
-            if (!items) items = ["id", "name"];
+        let { name, type, params, items } = variable;
+        //Lay du lieu theo ten bien "name" va "params" []
+        if (!params) params = {};
+        if (!items) items = ["id", "name"];
 
-            console.log(params);
-            console.log(items);
-
-            const data = await queryGraph("multiple", name, params, items);
+        const data = await queryGraph(type, name, params, items);
+        // console.log(data)
+        if (type === "multiple") {
             result[name] = data[name].items;
+        }
+        if (type === "single") {
+            result[name] = data[name];
         }
     }
 
@@ -56,8 +57,6 @@ exports.renderLiquid = async (engine, section) => {
     const sectionConfig = this.getSectionConfig(section);
 
     const data = await this.getDataBySectionConfig(sectionConfig.config);
-
-    console.log(data);
 
     const renderedSection = await engine.parseAndRender(
         sectionConfig.liquid,

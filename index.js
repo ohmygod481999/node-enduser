@@ -9,7 +9,7 @@ const { getPageInfo, renderLiquid } = require("./data");
 const engine = new Liquid();
 
 const app = express();
-const port = 3001;
+const port = 3003;
 
 app.engine("liquid", engine.express());
 app.set("views", "./views"); // specify the views directory
@@ -22,7 +22,11 @@ app.get("/*", async (req, res) => {
 
     const sections = await eInstance.getPageSections(Configuration.pages.home);
 
-    sections[0] = await renderLiquid(engine, sections[0]);
+    // const temp = await queryGraph("single", "article", {
+    //     id: "0e694889-b854-a337-dc9e-5e3d547ac2e1"
+    // }, ["id", "name"])
+    // console.log(temp)
+
     let renderLiquidSections = []
     for (let section of sections) {
         const temp = await renderLiquid(engine, section);

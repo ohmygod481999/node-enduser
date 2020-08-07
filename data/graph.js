@@ -52,19 +52,20 @@ exports.getQueryMulti = (
 
 exports.getQuerySingle = (
     name = "article",
-    params = {},
+    params,
     items = ["id", "name", "subDescription", "images {id, name}", "description"]
 ) => {
-    return gql`
+    console.log(params.id)
+    const strQuery = `
     query {
         ${name}(
             param: {
                 id:"${params.id}",
                 languageId: "${
-                    params.languageId ? params.languageId : Config.languageId
+                    params.languageId ? params.languageId : config.languageVi
                 }", 
                 merchantId: "${
-                    params.merchantId ? params.merchantId : Config.merchantId
+                    params.merchantId ? params.merchantId : config.merchantId
                 }"
             }
         ) {
@@ -72,6 +73,7 @@ exports.getQuerySingle = (
         }
     }
 `;
+    return gql(strQuery);
 };
 
 exports.queryGraph = async (type, name, params, items) => {
@@ -85,7 +87,6 @@ exports.queryGraph = async (type, name, params, items) => {
             break;
         default:
             throw Error("type error");
-            break;
     }
 
     const result = await this.gClient.query({
