@@ -1,31 +1,5 @@
 const Configuration = require("./config");
 
-exports.getPageInfo = async (eInstance, merchantCode) => {
-    const themeInfo = await eInstance.getThemeInfo({
-        merchantCode: merchantCode,
-    });
-
-    const { scripts, styles } = themeInfo;
-
-    return {
-        scripts,
-        styles,
-    };
-};
-
-// exports.renderScriptsAndStyles = (pageInfo) => {
-//     return (
-//         <Fragment>
-//             {pageInfo.styles.map((style, i) => (
-//                 <link rel="stylesheet" type="text/css" href={style} />
-//             ))}
-//             {pageInfo.scripts.map((script, i) => (
-//                 <script key={i} src={script}></script>
-//             ))}
-//         </Fragment>
-//     );
-// };
-
 exports.sliceString = (string, maxLength = 10) => {
     if (string.length > maxLength) return string.slice(0, maxLength) + " ...";
     return string;

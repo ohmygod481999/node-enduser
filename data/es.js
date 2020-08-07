@@ -1,4 +1,4 @@
-const Configuration = require("./config");
+const Configuration = require("../utils/config");
 
 const { Client } = require("@elastic/elasticsearch");
 
