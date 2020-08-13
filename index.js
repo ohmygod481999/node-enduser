@@ -20,16 +20,11 @@ app.get("/*", async (req, res) => {
 
     const pageInfo = await getPageInfo(eInstance, "labo");
 
-    const sections = await eInstance.getPageSections(Configuration.pages.home);
-
-    // const temp = await queryGraph("single", "article", {
-    //     id: "0e694889-b854-a337-dc9e-5e3d547ac2e1"
-    // }, ["id", "name"])
-    // console.log(temp)
+    const sections = await eInstance.getPageSections(pageId);
 
     let renderLiquidSections = []
     for (let section of sections) {
-        const temp = await renderLiquid(engine, section);
+        const temp = await renderLiquid(engine, section, pageParamId);
         renderLiquidSections.push(temp)
     }
 

@@ -29,19 +29,22 @@ exports.getSectionConfig = (section) => {
     }
 };
 
-exports.getDataBySectionConfig = async (config) => {
+exports.getDataBySectionConfig = async (config, paramId) => {
     const result = {};
     const variables = config.variables;
     if (!variables) return result;
     const systemVariables = ["articles"];
+
     for (let variable of variables) {
         let { name, type, params, items } = variable;
         //Lay du lieu theo ten bien "name" va "params" []
         if (!params) params = {};
+        for (let key in params) {
+            if (params[key] === "_param-id_") params[key] = paramId;
+        }
         if (!items) items = ["id", "name"];
 
         const data = await queryGraph(type, name, params, items);
-        // console.log(data)
         if (type === "multiple") {
             result[name] = data[name].items;
         }
@@ -53,10 +56,13 @@ exports.getDataBySectionConfig = async (config) => {
     return result;
 };
 
-exports.renderLiquid = async (engine, section) => {
+exports.renderLiquid = async (engine, section, paramId) => {
     const sectionConfig = this.getSectionConfig(section);
 
-    const data = await this.getDataBySectionConfig(sectionConfig.config);
+    const data = await this.getDataBySectionConfig(
+        sectionConfig.config,
+        paramId
+    );
 
     const renderedSection = await engine.parseAndRender(
         sectionConfig.liquid,

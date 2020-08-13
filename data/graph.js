@@ -36,7 +36,8 @@ exports.getQueryMulti = (
                 merchantId: "${
                     params.merchantId ? params.merchantId : config.merchantId
                 }",
-                ${params.themeWebId ? `themeWebId:"${params.themeWebId}"` : ""}
+                ${params.themeWebId ? `themeWebId:"${params.themeWebId}",` : ""}
+                ${params.categoryId ? `categoryIds:"${params.categoryId}"` : ""},
             }
         ) {
             totalCount
@@ -55,7 +56,6 @@ exports.getQuerySingle = (
     params,
     items = ["id", "name", "subDescription", "images {id, name}", "description"]
 ) => {
-    console.log(params.id)
     const strQuery = `
     query {
         ${name}(
