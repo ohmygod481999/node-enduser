@@ -16,7 +16,10 @@ app.set("views", "./views"); // specify the views directory
 app.set("view engine", "liquid"); // set liquid to default
 
 app.get("/*", async (req, res) => {
-    const [pageId, pageParamId] = req.params["0"].split("/");
+    let [pageId, pageParamId] = req.params["0"].split("/");
+
+    // phai lay trang home neu ko co first params
+    if (!pageId) pageId = Configuration.pages.home
 
     const pageInfo = await getPageInfo(eInstance, "labo");
 
